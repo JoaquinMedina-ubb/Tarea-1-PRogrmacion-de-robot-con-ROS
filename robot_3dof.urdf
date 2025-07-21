@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="three_dof_robot">
+
+  <!-- Includes de Gazebo y ROS2 Control -->
+  
+  
+
+  
+
+  <!-- Macro de inercia para prismas rectangulares -->
+  
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0"/>
+      <inertia
+        ixx="0"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="0"
+        iyz="0.0"
+        izz="0"/>
+    </inertial>
+  
+
+  <!-- Materiales -->
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+  <!-- Huella en el suelo -->
+  <link name="base_footprint"/>
+  <joint name="base_footprint_fixed" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Base link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.4" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.8"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.4" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.8"/>
+      </geometry>
+    </collision>
+    
+  </link>
+
+  <!-- Junta revolución rotando sobre Y -->
+  <joint name="base_to_moving" type="revolute">
+    <parent link="base_link"/>
+    <child link="moving_link"/>
+    <origin xyz="0.15 0.0 0.7" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0" upper="0" effort="10.0" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Moving link 1 -->
+  <link name="moving_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.25" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.8"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.25" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.8"/>
+      </geometry>
+    </collision>
+    
+  </link>
+
+    <!-- Junta revolución rotando sobre Y -->
+  <joint name="arm_to_moving" type="revolute">
+    <parent link="moving_link"/>
+    <child link="arm_link"/>
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0" upper="0" effort="10.0" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Moving link 2 -->
+  <link name="arm_link">
+    <visual>
+      <origin xyz="-0.1 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.5"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.8 0.1 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.25"/>
+      </geometry>
+    </collision>
+    
+  </link>
+
+  <!-- Junta revolución rotando sobre Z -->
+  <joint name="arm_to_forearm" type="revolute">
+    <parent link="arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0" upper="0" effort="10.0" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Moving link 3 -->
+  <link name="forearm_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.3"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.3"/>
+      </geometry>
+    </collision>
+    
+  </link>
+
+
+
+
+  <!-- =============== Gazebo y ROS2 Control =============== -->
+  
+  
+</robot>
