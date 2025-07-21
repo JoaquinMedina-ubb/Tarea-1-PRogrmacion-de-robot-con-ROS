@@ -1,0 +1,18 @@
+three_dof_sim.launch.py
+
+Este archivo orquesta la simulación completa del robot 3DOF en Ignition Gazebo con ROS 2 Control.
+Incluye varios pasos:
+
+    Incluye rsp.launch.py para cargar la descripción del robot.
+
+    Inicia Gazebo (Ignition) en modo headless y con interfaz gráfica.
+
+    Publica el URDF en /robot_description y crea la entidad del robot en Gazebo.
+
+    Configura un puente ROS 2 ↔ Ignition usando ros_gz_bridge, para sincronizar mensajes como /clock y estados de las articulaciones.
+
+    Lanza los spawners de controladores:
+
+        joint_state_broadcaster publica los estados de las articulaciones.
+
+        joint_trajectory_controller permite enviar trayectorias al robot (inicia con un pequeño retardo de 2s para asegurar que todo esté cargado).

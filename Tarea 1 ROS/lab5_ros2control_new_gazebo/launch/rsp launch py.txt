@@ -1,0 +1,9 @@
+rsp.launch.py
+
+Este archivo es un script de lanzamiento para ROS 2 que se encarga de iniciar el robot_state_publisher con el modelo 3DOF definido en robot_3dof.xacro.
+
+    Procesa el archivo Xacro para generar la descripción URDF del robot usando la librería xacro.
+
+    Define parámetros como use_sim_time (para usar el reloj simulado) y use_ros2_control (para activar los controladores de ROS 2).
+
+    Lanza el nodo robot_state_publisher, que publica las transformaciones entre los links del robot para que puedan ser usadas por otras herramientas como RViz o Gazebo.

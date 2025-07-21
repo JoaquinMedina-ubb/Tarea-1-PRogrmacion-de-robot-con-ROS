@@ -1,0 +1,34 @@
+# one_dof solo posicion
+# controller_manager:
+#   ros__parameters:
+#     update_rate: 10
+
+#     joint_state_broadcaster:
+#       type: joint_state_broadcaster/JointStateBroadcaster
+
+#     position_controller:
+#       type: position_controllers/JointGroupPositionController
+
+# position_controller:
+#   ros__parameters:
+#     joints:
+#       - base_to_moving
+
+
+controller_manager:
+  ros__parameters:
+    update_rate: 50        # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:         
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints: [base_to_moving, arm_to_moving,arm_to_forearm]
+    command_interfaces: [position]        # por defecto position
+    state_interfaces:   [position, velocity]
+    interpolate_from_desired_state: true
+    allow_partial_joints_goal: false

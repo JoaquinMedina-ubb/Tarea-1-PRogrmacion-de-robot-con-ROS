@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="three_dof_robot">
+
+  <!-- Includes de Gazebo y ROS2 Control -->
+  <xacro:include filename="$(find lab5_ros2control_new_gazebo)/models/three_dof/three_dof.gazebo.xacro" />
+  <xacro:include filename="$(find lab5_ros2control_new_gazebo)/models/three_dof/three_dof.ros2control.xacro" />
+
+  <xacro:property name="M_PI" value="3.14159274"/>
+
+  <!-- Macro de inercia para prismas rectangulares -->
+  <xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m}"/>
+      <inertia
+        ixx="${(m/12) * (h*h + d*d)}"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="${(m/12) * (w*w + d*d)}"
+        iyz="0.0"
+        izz="${(m/12) * (w*w + h*h)}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Materiales -->
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+  <!-- Huella en el suelo -->
+  <link name="base_footprint"/>
+  <joint name="base_footprint_fixed" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Base link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.4" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.8"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.4" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.8"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="5.0" w="0.2" h="0.2" d="0.8"/>
+  </link>
+
+  <!-- Junta revolución rotando sobre Y -->
+  <joint name="base_to_moving" type="revolute">
+    <parent link="base_link"/>
+    <child link="moving_link"/>
+    <origin xyz="0.15 0.0 0.7" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-${M_PI}" upper="${M_PI}" effort="10.0" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Moving link 1 -->
+  <link name="moving_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.25" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.8"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.25" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.8"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="0.3" w="0.1" h="0.2" d="0.8"/>
+  </link>
+
+    <!-- Junta revolución rotando sobre Y -->
+  <joint name="arm_to_moving" type="revolute">
+    <parent link="moving_link"/>
+    <child link="arm_link"/>
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-${M_PI}" upper="${M_PI}" effort="10.0" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Moving link 2 -->
+  <link name="arm_link">
+    <visual>
+      <origin xyz="-0.1 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.5"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.8 0.1 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.2 0.25"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="0.3" w="0.1" h="0.2" d="0.5"/>
+  </link>
+
+  <!-- Junta revolución rotando sobre Z -->
+  <joint name="arm_to_forearm" type="revolute">
+    <parent link="arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-${M_PI}" upper="${M_PI}" effort="10.0" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.1"/>
+  </joint>
+
+  <!-- Moving link 3 -->
+  <link name="forearm_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.3"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.3"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="0.2" w="0.1" h="0.1" d="0.3"/>
+  </link>
+
+
+
+
+  <!-- =============== Gazebo y ROS2 Control =============== -->
+  <xacro:robot_gazebo/>
+  <xacro:robot_ros2control/>
+</robot>
